@@ -1,0 +1,16 @@
+{
+  "name": "picpic-demo",
+  "version": "0.0.0",
+  "description": "Webapp for demonstrating the picpic system",
+  "main": "app/index.js",
+  "repository": "https://github.com/mgschoen/picpic-demo.git",
+  "author": "Martin Schön",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "uikit": "^3.0.0-rc.25"
+  },
+  "devDependencies": {
+    "webpack": "^4.27.0"
+  }
+}
