@@ -32,7 +32,6 @@ function changeView (view) {
 function toggleLoadingState (loading) {
     var hideOnload = document.querySelectorAll('*[data-pp-hide-onload]')
     var showOnload = document.querySelectorAll('*[data-pp-show-onload]')
-    console.log(hideOnload)
     var showFunction = function (element) {
         element.removeAttribute('hidden')
     }
@@ -73,21 +72,34 @@ function toggleUIDisabled (disabled) {
  * Insert the specified list of images into the output view
  * @param {string[]} urls 
  */
-function insertImages (urls) {
+function insertImages (images) {
     var imageContainer = document.querySelector('#pp-output-images')
     imageContainer.innerHTML = ''
-    urls.forEach(function(url){
+    images.forEach(function(imageObject){
         var item = document.createElement('div')
         var tile = document.createElement('div')
         var image = document.createElement('div')
+
+        var overlay = document.createElement('a')
         
         tile.classList.add('uk-tile', 'uk-tile-primary', 'uk-padding-remove')
         image.classList.add('uk-height-medium', 'uk-background-cover')
         image.setAttribute('uk-img', '')
-        image.setAttribute('data-src', url)
+        image.setAttribute('data-src', imageObject.previewUrl)
+        
+        overlay.classList.add('uk-overlay', 'uk-overlay-primary', 'uk-position-cover')
+        overlay.setAttribute('href', imageObject.detailUrl)
+        overlay.setAttribute('target', '_blank')
+        var title = imageObject.title
+        var caption = imageObject.caption
+        overlay.innerHTML = '<h4 class="uk-heading-divider">' 
+            + title.slice(0,50) + ((title.length > 50) ? '...</h4>' : '</h4>')
+            + '<p>' + caption.slice(0,100) + ((caption.length > 100) ? '...</p>' : '</p>')
 
         tile.append(image)
+        tile.append(overlay)
         item.append(tile)
+
         imageContainer.append(item)
     })
 }

@@ -9,3 +9,19 @@
 }
 
 @import "uikit/src/scss/uikit-theme.scss";
+
+#pp-output-images {
+
+    & .uk-tile {
+
+        & .uk-overlay-primary {
+            display: none;
+        }
+
+        &:hover .uk-overlay-primary {
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+        }
+    }
+}

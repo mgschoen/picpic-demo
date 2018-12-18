@@ -18,6 +18,7 @@ import {
 } from './js/functions' 
 
 import { parseUrlParameters } from './js/util'
+import { populateImages } from './js/debug'
 
 UIKit.use(Icons)
 
@@ -31,7 +32,7 @@ var ppButtonReturn = document.querySelector('#pp-button-return')
 var ppDebug = document.querySelector('#pp-debug')
 var ppDebugViewInput = document.querySelector('#pp-debug-view-input')
 var ppDebugViewOutput = document.querySelector('#pp-debug-view-output')
-var ppDebugFillImages = document.querySelector('#pp-debug-fill-images')
+var ppDebugFillImages = document.querySelector('#pp-debug-populate-images')
 
 // event listeners
 ppButtonSubmit.addEventListener('click', function () {
@@ -44,7 +45,7 @@ ppButtonSubmit.addEventListener('click', function () {
         })
         var urls = response.data.images.map(function(img){ return img.previewUrl })
         changeView('output')
-        insertImages(urls)
+        insertImages(response.data.images)
     }, function (error) {
         toggleLoadingState(false)
         UIKit.notification(error.message, {
@@ -87,6 +88,6 @@ if (debug) {
     })
     ppDebugFillImages.addEventListener('click', function (e) {
         e.preventDefault()
-        fillWithImages()
+        populateImages()
     })
 }
