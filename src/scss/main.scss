@@ -1,0 +1,11 @@
+@import "uikit/src/scss/variables-theme.scss";
+@import "uikit/src/scss/mixins-theme.scss";
+
+/* Custom overwrites */
+@mixin hook-notification-message() {
+    border: $global-border-width solid $global-border;
+    border-radius: $border-rounded-border-radius;
+    box-shadow: $global-small-box-shadow;
+}
+
+@import "uikit/src/scss/uikit-theme.scss";
