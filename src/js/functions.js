@@ -29,6 +29,69 @@ function changeView (view) {
     nextView.style.display = 'block'
 }
 
+function toggleLoadingState (loading) {
+    var hideOnload = document.querySelectorAll('*[data-pp-hide-onload]')
+    var showOnload = document.querySelectorAll('*[data-pp-show-onload]')
+    console.log(hideOnload)
+    var showFunction = function (element) {
+        element.removeAttribute('hidden')
+    }
+    var hideFunction = function (element) {
+        element.setAttribute('hidden', '')
+    }
+    toggleUIDisabled(loading)
+    if (loading) {
+        hideOnload.forEach(hideFunction)
+        showOnload.forEach(showFunction)
+    } else {
+        hideOnload.forEach(showFunction)
+        showOnload.forEach(hideFunction)
+    }
+}
+
+/**
+ * Disable or enable all interactive UI elements
+ * @param {boolean} disabled 
+ */
+function toggleUIDisabled (disabled) {
+    var buttons = document.querySelectorAll('button')
+    var inputs = document.querySelectorAll('input')
+    var textareas = document.querySelectorAll('textarea')
+    var toggler = function (element) {
+        if (disabled) {
+            element.setAttribute('disabled', '')
+        } else {
+            element.removeAttribute('disabled')
+        }
+    }
+    buttons.forEach(toggler)
+    inputs.forEach(toggler)
+    textareas.forEach(toggler)
+}
+
+/**
+ * Insert the specified list of images into the output view
+ * @param {string[]} urls 
+ */
+function insertImages (urls) {
+    var imageContainer = document.querySelector('#pp-output-images')
+    imageContainer.innerHTML = ''
+    urls.forEach(function(url){
+        var item = document.createElement('div')
+        var tile = document.createElement('div')
+        var image = document.createElement('div')
+        
+        tile.classList.add('uk-tile', 'uk-tile-primary', 'uk-padding-remove')
+        image.classList.add('uk-height-medium', 'uk-background-cover')
+        image.setAttribute('uk-img', '')
+        image.setAttribute('data-src', url)
+
+        tile.append(image)
+        item.append(tile)
+        imageContainer.append(item)
+    })
+}
+
 /**
  * Submit the text in the input textarea to the picpic API
  * @param {function} successCallback 
@@ -54,23 +117,11 @@ function submitText (successCallback, errorCallback) {
     })
 }
 
-function insertImages (urls) {
-    var imageContainer = document.querySelector('#pp-output-images')
-    imageContainer.innerHTML = ''
-    urls.forEach(function(url){
-        var item = document.createElement('div')
-        var tile = document.createElement('div')
-        var image = document.createElement('div')
-        
-        tile.classList.add('uk-tile', 'uk-tile-primary', 'uk-padding-remove')
-        image.classList.add('uk-height-medium', 'uk-background-cover')
-        image.setAttribute('uk-img', '')
-        image.setAttribute('data-src', url)
-
-        tile.append(image)
-        item.append(tile)
-        imageContainer.append(item)
-    })
+export { 
+    changeText, 
+    changeView, 
+    insertImages, 
+    submitText, 
+    toggleLoadingState, 
+    toggleUIDisabled
 }
-
-export { changeText, changeView, insertImages, submitText }

@@ -13,7 +13,8 @@ import {
     changeText,
     changeView,
     insertImages, 
-    submitText
+    submitText,
+    toggleLoadingState
 } from './js/functions' 
 
 import { parseUrlParameters } from './js/util'
@@ -34,7 +35,9 @@ var ppDebugFillImages = document.querySelector('#pp-debug-fill-images')
 
 // event listeners
 ppButtonSubmit.addEventListener('click', function () {
+    toggleLoadingState(true)
     submitText(function (response) {
+        toggleLoadingState(false)
         UIKit.notification('Picpic has found some images!', {
             status: 'success',
             pos: 'bottom-right'
@@ -43,6 +46,7 @@ ppButtonSubmit.addEventListener('click', function () {
         changeView('output')
         insertImages(urls)
     }, function (error) {
+        toggleLoadingState(false)
         UIKit.notification(error.message, {
             status: 'danger',
             pos: 'bottom-right'
