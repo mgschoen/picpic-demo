@@ -29,6 +29,16 @@ function changeView (view) {
     nextView.style.display = 'block'
 }
 
+/**
+ * Switch between the visual appearances of being busy
+ * loading something and being ready for interaction.
+ * In loading state, all interactive UI elements are disabled.
+ * Elements with attribute `data-pp-hide-onload` are only
+ * visible when not loading, elements with `data-pp-show-onload`
+ * are only visible when loading.
+ * @param {boolean} loading - if true, loading state is activated,
+ *                            otherwise deactivated
+ */
 function toggleLoadingState (loading) {
     var hideOnload = document.querySelectorAll('*[data-pp-hide-onload]')
     var showOnload = document.querySelectorAll('*[data-pp-show-onload]')
@@ -116,7 +126,7 @@ function submitText (successCallback, errorCallback) {
         return
     }
     axios({
-        url: 'http://picpic-api.argonn.me/custom/picpic/ml?threshold=0.1&numImages=10', 
+        url: 'http://picpic-api.argonn.me/custom/picpic/ml?threshold=0.1&numImages=12', 
         method: 'post',
         headers: { 'Content-Type': 'text/plain' },
         data: textContent
