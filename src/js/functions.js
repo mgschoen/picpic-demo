@@ -27,6 +27,81 @@ function changeView (view) {
     })
     var nextView = document.querySelector('#pp-view-' + view)
     nextView.style.display = 'block'
+    window.history.pushState(null, null, '#' + view)
+}
+
+/**
+ * Insert the specified list of images into the output view
+ * @param {string[]} urls 
+ */
+function insertImages (images) {
+    var imageContainer = document.querySelector('#pp-output-images')
+    imageContainer.innerHTML = ''
+    images.forEach(function(imageObject){
+        var item = document.createElement('div')
+        var tile = document.createElement('div')
+        var image = document.createElement('div')
+
+        var overlay = document.createElement('a')
+        
+        tile.classList.add('uk-tile', 'uk-tile-primary', 'uk-padding-remove')
+        image.classList.add('uk-height-medium', 'uk-background-cover')
+        image.setAttribute('uk-img', '')
+        image.setAttribute('data-src', imageObject.previewUrl)
+        
+        overlay.classList.add('uk-overlay', 'uk-overlay-primary', 'uk-position-cover')
+        overlay.setAttribute('href', imageObject.detailUrl)
+        overlay.setAttribute('target', '_blank')
+        var title = imageObject.title
+        var caption = imageObject.caption
+        overlay.innerHTML = '<h4 class="uk-heading-divider">' 
+            + title.slice(0,50) + ((title.length > 50) ? '...</h4>' : '</h4>')
+            + '<p>' + caption.slice(0,100) + ((caption.length > 100) ? '...</p>' : '</p>')
+
+        tile.append(image)
+        tile.append(overlay)
+        item.append(tile)
+
+        imageContainer.append(item)
+    })
+}
+
+function insertText (plainText) {
+    var textContainer = document.querySelector('#pp-output-text')
+    var paragraphs = plainText.split('\n')
+    var innerHTML = ''
+    paragraphs.forEach(function (paragraph) {
+        var trimmedParagraphContent = paragraph.trim()
+        if (trimmedParagraphContent.length > 0) {
+            innerHTML += ('<p>' + trimmedParagraphContent + '</p>')
+        }
+    })
+    textContainer.innerHTML = innerHTML
+}
+
+/**
+ * Submit the text in the input textarea to the picpic API
+ * @param {function} successCallback 
+ * @param {function} errorCallback 
+ */
+function submitText (successCallback, errorCallback) {
+    var textContent = textArea.value.trim()
+    if (textContent.length === 0) {
+        errorCallback(new Error('Please insert an article text'))
+        return
+    }
+    axios({
+        url: 'http://picpic-api.argonn.me/custom/picpic/ml?threshold=0.1&numImages=12', 
+        method: 'post',
+        headers: { 'Content-Type': 'text/plain' },
+        data: textContent
+    })
+    .then(function (response) {
+        successCallback(response, textContent)
+    })
+    .catch(function (error) {
+        errorCallback(error)
+    })
 }
 
 /**
@@ -78,64 +153,18 @@ function toggleUIDisabled (disabled) {
     textareas.forEach(toggler)
 }
 
-/**
- * Insert the specified list of images into the output view
- * @param {string[]} urls 
- */
-function insertImages (images) {
-    var imageContainer = document.querySelector('#pp-output-images')
-    imageContainer.innerHTML = ''
-    images.forEach(function(imageObject){
-        var item = document.createElement('div')
-        var tile = document.createElement('div')
-        var image = document.createElement('div')
-
-        var overlay = document.createElement('a')
-        
-        tile.classList.add('uk-tile', 'uk-tile-primary', 'uk-padding-remove')
-        image.classList.add('uk-height-medium', 'uk-background-cover')
-        image.setAttribute('uk-img', '')
-        image.setAttribute('data-src', imageObject.previewUrl)
-        
-        overlay.classList.add('uk-overlay', 'uk-overlay-primary', 'uk-position-cover')
-        overlay.setAttribute('href', imageObject.detailUrl)
-        overlay.setAttribute('target', '_blank')
-        var title = imageObject.title
-        var caption = imageObject.caption
-        overlay.innerHTML = '<h4 class="uk-heading-divider">' 
-            + title.slice(0,50) + ((title.length > 50) ? '...</h4>' : '</h4>')
-            + '<p>' + caption.slice(0,100) + ((caption.length > 100) ? '...</p>' : '</p>')
-
-        tile.append(image)
-        tile.append(overlay)
-        item.append(tile)
-
-        imageContainer.append(item)
-    })
-}
-
-/**
- * Submit the text in the input textarea to the picpic API
- * @param {function} successCallback 
- * @param {function} errorCallback 
- */
-function submitText (successCallback, errorCallback) {
-    var textContent = textArea.value.trim()
-    if (textContent.length === 0) {
-        errorCallback(new Error('Please insert an article text'))
-        return
-    }
-    axios({
-        url: 'http://picpic-api.argonn.me/custom/picpic/ml?threshold=0.1&numImages=12', 
-        method: 'post',
-        headers: { 'Content-Type': 'text/plain' },
-        data: textContent
-    })
-    .then(function (response) {
-        successCallback(response)
-    })
-    .catch(function (error) {
-        errorCallback(error)
+function updateStats (searchTerm, termList) {
+    var searchTermContainer = document.querySelector('#pp-output-searchterm')
+    var termListContainer = document.querySelector('#pp-output-termlist')
+    searchTermContainer.textContent = searchTerm
+    termListContainer.innerHTML = ''
+    termList.forEach(function (term) {
+        var termElement = document.createElement('code')
+        termElement.classList.add('pp-output-term', 'uk-border-rounded')
+        termElement.setAttribute('uk-tooltip', 'p = ' + term.p.toString())
+        termElement.textContent = term.originalTerms[0]
+        termListContainer.append(termElement)
+        termListContainer.append(document.createTextNode(' '))
     })
 }
 
@@ -143,7 +172,9 @@ export {
     changeText, 
     changeView, 
     insertImages, 
+    insertText,
     submitText, 
     toggleLoadingState, 
-    toggleUIDisabled
+    toggleUIDisabled,
+    updateStats
 }

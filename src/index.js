@@ -13,12 +13,18 @@ import {
     changeText,
     changeView,
     insertImages, 
+    insertText,
     submitText,
-    toggleLoadingState
+    toggleLoadingState,
+    updateStats
 } from './js/functions' 
 
 import { parseUrlParameters } from './js/util'
-import { populateImages } from './js/debug'
+import { 
+    plugRequestMockup,
+    populateImages, 
+    populateTerms
+} from './js/debug'
 
 UIKit.use(Icons)
 
@@ -32,20 +38,24 @@ var ppButtonReturn = document.querySelector('#pp-button-return')
 var ppDebug = document.querySelector('#pp-debug')
 var ppDebugViewInput = document.querySelector('#pp-debug-view-input')
 var ppDebugViewOutput = document.querySelector('#pp-debug-view-output')
+var ppDebugFillAll = document.querySelector('#pp-debug-populate')
 var ppDebugFillImages = document.querySelector('#pp-debug-populate-images')
+var ppDebugFillTerms = document.querySelector('#pp-debug-populate-terms')
+var ppDebugMockup = document.querySelector('#pp-debug-mockup')
 
 // event listeners
-ppButtonSubmit.addEventListener('click', function () {
+var submitEventListener = function () {
     toggleLoadingState(true)
-    submitText(function (response) {
+    submitText(function (response, submittedText) {
         toggleLoadingState(false)
         UIKit.notification('Picpic has found some images!', {
             status: 'success',
             pos: 'bottom-right'
         })
-        var urls = response.data.images.map(function(img){ return img.previewUrl })
-        changeView('output')
+        updateStats(response.data.queryString, response.data.queryTerms)
         insertImages(response.data.images)
+        insertText(submittedText)
+        changeView('output')
     }, function (error) {
         toggleLoadingState(false)
         UIKit.notification(error.message, {
@@ -53,7 +63,9 @@ ppButtonSubmit.addEventListener('click', function () {
             pos: 'bottom-right'
         })
     })
-})
+}
+
+ppButtonSubmit.addEventListener('click', submitEventListener)
 
 ppButtonSample1.addEventListener('click', function () {
     changeText(sampleText1)
@@ -74,6 +86,17 @@ var urlParams = parseUrlParameters(window.location.search)
 var initialView = urlParams.initialView || 'input'
 var debug = urlParams.godMode ? true : false
 
+// init hash routing
+var navigationEventListener = function () {
+    var hash = window.location.hash
+    if (hash.length > 0) {
+        changeView(hash.slice(1))
+    } else {
+        changeView(initialView)
+    }
+}
+window.addEventListener('hashchange', navigationEventListener)
+
 changeView(initialView)
 
 if (debug) {
@@ -86,8 +109,27 @@ if (debug) {
         e.preventDefault()
         changeView('output')
     })
+    ppDebugFillAll.addEventListener('click', function (e) {
+        e.preventDefault()
+        populateImages()
+        populateTerms()
+    })
     ppDebugFillImages.addEventListener('click', function (e) {
         e.preventDefault()
         populateImages()
+    })
+    ppDebugFillTerms.addEventListener('click', function (e) {
+        e.preventDefault()
+        populateTerms()
+    })
+    ppDebugMockup.addEventListener('click', function (e) {
+        e.preventDefault()
+        plugRequestMockup(ppButtonSubmit, submitEventListener, function () {
+            ppDebugMockup.setAttribute('data-mockup-active', true)
+            UIKit.notification('Request mockup activated', {
+                status: 'info',
+                pos: 'bottom-right'
+            })
+        })
     })
 }

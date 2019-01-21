@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300');
+
+$global-font-family: "Roboto Slab" -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
 @import "uikit/src/scss/variables-theme.scss";
 @import "uikit/src/scss/mixins-theme.scss";
 
@@ -22,6 +26,28 @@
             cursor: pointer;
             display: block;
             text-decoration: none;
+        }
+    }
+}
+
+.pp-output {
+    
+    &-text {
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+
+    &-stats {
+        line-height: 2;
+    }
+
+    &-term {
+        border: 1px solid $global-muted-background;
+        color: $global-color;
+
+        &:hover {
+            border: 1px solid $global-color;
+            cursor: pointer;
         }
     }
 }

@@ -9,7 +9,7 @@
 
     <nav uk-navbar class="uk-navbar-container">
         <div class="uk-navbar-center">
-            <div class="uk-navbar-item uk-logo">PicPic Demo</div>
+            <a class="uk-navbar-item uk-logo" href="#input">PicPic Demo</a>
             <ul class="uk-navbar-nav">
             </ul>
         </div>
@@ -83,20 +83,28 @@
     <div class="uk-container uk-container-large uk-animation-fade uk-margin-medium-top pp-view"
         id="pp-view-output">
 
-        <h1>Here is your selection</h1>
+        <h2>Here is your selection</h2>
 
-        <div uk-grid class="uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-collapse"
+        <div class="uk-section uk-section-muted uk-section-xsmall uk-padding-small uk-margin pp-output-stats">
+            Search term: <code id="pp-output-searchterm"></code> &ndash;&nbsp;
+            Terms under consideration: 
+            <span id="pp-output-termlist"></span>
+        </div>
+
+        <div uk-grid class="uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-collapse uk-margin-top"
             uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 100"
             id="pp-output-images">
-            <!-- 
-            <div>
-                <div class="uk-tile uk-tile-primary uk-padding-remove">
-                    <div uk-img class="uk-height-medium uk-background-cover"
-                        data-src="https://example.com">
-                    </div>
-                </div>
-            </div>
-            -->
+        </div>
+
+        <hr class="uk-divider-vertical uk-margin-medium">
+
+        <div class="uk-width-1-2@xl uk-width-3-5@l uk-width-2-3@s uk-width-1-1 uk-align-center pp-output-text"
+            id="pp-output-text">
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+            <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+            <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
         </div>
 
         <button class="uk-button
@@ -117,7 +125,10 @@
             <ul class="uk-navbar-nav">
                 <li><a href="" id="pp-debug-view-input">Input</a></li>
                 <li><a href="" id="pp-debug-view-output">Output</a></li>
+                <li><a href="" id="pp-debug-populate">Populate</a></li>
                 <li><a href="" id="pp-debug-populate-images">Populate Images</a></li>
+                <li><a href="" id="pp-debug-populate-terms">Populate Terms</a></li>
+                <li><a href="" id="pp-debug-mockup">Activate Mockup</a></li>
             </ul>
         </div>
     </nav>
