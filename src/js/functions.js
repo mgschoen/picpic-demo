@@ -16,7 +16,11 @@ function changeText (newText) {
  * Switch to the specified view
  * @param {string} view 
  */
-function changeView (view) {
+function changeView (url) {
+    var slugs = url.split('/').filter(function (slug) {
+        return slug.length > 0
+    })
+    var view = slugs[0]
     if (validViews.indexOf(view) < 0) {
         console.error(view + ' is an invalid view identifier')
         return
@@ -27,7 +31,7 @@ function changeView (view) {
     })
     var nextView = document.querySelector('#pp-view-' + view)
     nextView.style.display = 'block'
-    window.history.pushState(null, null, '#' + view)
+    window.history.pushState(null, null, '#/' + view)
 }
 
 /**
