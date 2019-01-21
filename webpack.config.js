@@ -1,9 +1,13 @@
 const path = require('path')
+const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
+const PACKAGE_JSON = require('./package.json')
+const PACKAGE_VERSION = PACKAGE_JSON.version
 
 module.exports = {
     mode: 'production',
@@ -29,6 +33,9 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.DefinePlugin({
+            'VERSION': JSON.stringify(PACKAGE_VERSION)
+        }),
         new CleanWebpackPlugin(['dist']),
         new HTMLWebpackPlugin({
             template: './src/index.html'
