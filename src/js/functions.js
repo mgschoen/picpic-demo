@@ -166,7 +166,7 @@ function updateStats (searchTerm, termList) {
         var termElement = document.createElement('code')
         termElement.classList.add('pp-output-term', 'uk-border-rounded')
         termElement.setAttribute('uk-tooltip', 'p = ' + term.p.toString())
-        termElement.textContent = term.originalTerms[0]
+        termElement.textContent = term.canonicalTerm || term.originalTerms[0]
         termListContainer.append(termElement)
         termListContainer.append(document.createTextNode(' '))
     })
