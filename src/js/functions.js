@@ -60,7 +60,10 @@ function insertImages (images) {
         var caption = imageObject.caption
         overlay.innerHTML = '<h4 class="uk-heading-divider">' 
             + title.slice(0,50) + ((title.length > 50) ? '...</h4>' : '</h4>')
-            + '<p>' + caption.slice(0,100) + ((caption.length > 100) ? '...</p>' : '</p>')
+            + '<p>' + (caption 
+                ? (caption.slice(0,100) + ((caption.length > 100) ? '...' : '')) 
+                : '') 
+            + '</p>'
 
         tile.append(image)
         tile.append(overlay)
