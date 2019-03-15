@@ -1,6 +1,11 @@
 import axios from 'axios'
 
 var validViews = [ 'input', 'output' ]
+var apiUrls = {
+    default: 'http://picpic-api.argonn.me/custom/picpic/ml',
+    netlify: 'https://vigilant-yonath-af08cf.netlify.com/.netlify/functions/custom-picpic'
+}
+
 var textArea = document.querySelector('#pp-textarea-article')
 
 /**
@@ -88,17 +93,23 @@ function insertText (plainText) {
 
 /**
  * Submit the text in the input textarea to the picpic API
+ * @param {Object} options
  * @param {function} successCallback 
  * @param {function} errorCallback 
  */
-function submitText (successCallback, errorCallback) {
+function submitText (options, successCallback, errorCallback) {
     var textContent = textArea.value.trim()
     if (textContent.length === 0) {
         errorCallback(new Error('Please insert an article text'))
         return
     }
+    var validApis = Object.keys(apiUrls)
+    var apiName = (validApis.indexOf(options.api) >= 0) 
+        ? options.api
+        : 'default'
+    var baseUrl = apiUrls[apiName]
     axios({
-        url: 'http://picpic-api.argonn.me/custom/picpic/ml?threshold=0.1&numImages=12', 
+        url: baseUrl + '?threshold=0.1&numImages=12', 
         method: 'post',
         headers: { 'Content-Type': 'text/plain' },
         data: textContent

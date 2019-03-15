@@ -46,7 +46,9 @@ var ppDebugMockup = document.querySelector('#pp-debug-mockup')
 // event listeners
 var submitEventListener = function () {
     toggleLoadingState(true)
-    submitText(function (response, submittedText) {
+    submitText({
+        api: httpsEmbed ? 'netlify' : 'default'
+    }, function (response, submittedText) {
         toggleLoadingState(false)
         UIKit.notification('Picpic has found some images!', {
             status: 'success',
@@ -85,6 +87,7 @@ ppButtonReturn.addEventListener('click', function () {
 var urlParams = parseUrlParameters(window.location.search)
 var initialView = urlParams.initialView || 'input'
 var debug = urlParams.godMode ? true : false
+var httpsEmbed = urlParams.httpsEmbed ? true : false
 
 // init hash routing
 var navigationEventListener = function () {
