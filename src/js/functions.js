@@ -1,10 +1,6 @@
 import axios from 'axios'
 
-var validViews = [ 'input', 'output' ]
-var apiUrls = {
-    default: 'http://picpic-api.argonn.me/custom/picpic/ml',
-    netlify: 'https://vigilant-yonath-af08cf.netlify.com/.netlify/functions/custom-picpic'
-}
+import { apiUrls, validViews } from './constants'
 
 var textArea = document.querySelector('#pp-textarea-article')
 
