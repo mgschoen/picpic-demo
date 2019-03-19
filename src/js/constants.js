@@ -11,7 +11,10 @@ module.exports = {
 
     tracking: {
         baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScSNW2s62mFgwCpajlXNCktSwy-Fyn8I-tW8V_m01h0PSma7g/formResponse',
-        cookieName: 'picpic_session_id',
+        cookieNames: {
+            requestHash: 'picpic_request_hash',
+            sessionID: 'picpic_session_id'
+        },
         keys: {
             requestHash: 'entry.2084126920',
             sessionID: 'entry.1403945760',
@@ -19,7 +22,7 @@ module.exports = {
             actionContent: 'entry.428068187',
             actionContentAppendix: 'entry.2011657705'
         },
-        validActionTypes: ['submitText', 'clickImage']
+        validActionTypes: ['receiveImages', 'submitText', 'clickImage']
     },
     
     validViews: ['input', 'output']

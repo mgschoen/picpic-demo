@@ -5,6 +5,8 @@ import hash from 'object-hash'
 import { tracking } from './constants'
 import { serializeUrlEncoded } from './util'
 
+/* Tracking requests */
+
 function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 
     if (!actionType || tracking.validActionTypes.indexOf(actionType) < 0) {
@@ -13,10 +15,10 @@ function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 
     var baseUrl = tracking.baseUrl
     var keys = tracking.keys
-    var sessionID = cookie.get(tracking.cookieName)
+    var sessionID = cookie.get(tracking.cookieNames.sessionID)
     if (!sessionID) {
         throw new Error('Could not read PicPic session ID from cookie "' 
-            + tracking.cookieName + '"')
+            + tracking.cookieNames.sessionID + '"')
     }
     var trackingData = {}
     trackingData[keys.requestHash] = requestHash
@@ -39,14 +41,39 @@ function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 }
 
 function recordSubmitAction (content) {
-    var sessionID = cookie.get(tracking.cookieName)
+    var sessionID = cookie.get(tracking.cookieNames.sessionID)
     var now = new Date().getTime()
     var requestHash = hash(now.toString() + sessionID.toString())
+    storeRequestHash(requestHash)
     sendTrackingInfo(requestHash, 'submitText', content, '')
 }
 
-function storeSessionID (id) {
-    cookie.set(tracking.cookieName, id)
+function recordReceivedAction (searchTerm, images) {
+    var requestHash = cookie.get(tracking.cookieNames.requestHash)
+    var imageList = images.map(function (image) {
+        return image.detailUrl + '\n'
+    }).join('')
+    sendTrackingInfo(requestHash, 'receiveImages', imageList, searchTerm)
 }
 
-export { recordSubmitAction, storeSessionID }
+
+/* Cookie management */
+
+function storeTrackingCookie (key, value) {
+    var cookieName = tracking.cookieNames[key]
+    if (cookieName) {
+        cookie.set(cookieName, value)
+    } else {
+        throw new Error('Could not store cookie. Unknown key "' + key + '"')
+    }
+}
+
+function storeRequestHash (hash) {
+    storeTrackingCookie('requestHash', hash)
+}
+
+function storeSessionID (id) {
+    storeTrackingCookie('sessionID', id)
+}
+
+export { recordReceivedAction, recordSubmitAction, storeSessionID }

@@ -26,7 +26,10 @@ import {
     populateTerms
 } from './js/debug'
 
-import { storeSessionID } from './js/tracking'
+import { 
+    recordReceivedAction, 
+    storeSessionID
+} from './js/tracking'
 
 UIKit.use(Icons)
 
@@ -52,6 +55,9 @@ var submitEventListener = function () {
         api: httpsEmbed ? 'netlify' : 'default',
         track: trackingToken ? true : false
     }, function (response, submittedText) {
+        if (trackingToken) {
+            recordReceivedAction(response.data.queryString, response.data.images)
+        }
         toggleLoadingState(false)
         UIKit.notification('Picpic has found some images!', {
             status: 'success',
