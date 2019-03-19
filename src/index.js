@@ -39,7 +39,7 @@ var ppButtonSubmit = document.querySelector('#pp-button-submit')
 var ppButtonSample1 = document.querySelector('#pp-button-sample-1')
 var ppButtonSample2 = document.querySelector('#pp-button-sample-2')
 var ppButtonSample3 = document.querySelector('#pp-button-sample-3')
-var ppButtonReturn = document.querySelector('#pp-button-return')
+var ppReturnButtons = document.querySelectorAll('.pp-button-return')
 
 var ppDebug = document.querySelector('#pp-debug')
 var ppDebugViewInput = document.querySelector('#pp-debug-view-input')
@@ -89,8 +89,11 @@ ppButtonSample3.addEventListener('click', function () {
     changeText(sampleText3)
 })
 
-ppButtonReturn.addEventListener('click', function () {
-    changeView('input')
+ppReturnButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+        changeText('')
+        changeView('input')
+    })
 })
 
 // initialisation

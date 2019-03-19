@@ -35,6 +35,7 @@ function changeView (url) {
     var nextView = document.querySelector('#pp-view-' + view)
     nextView.style.display = 'block'
     window.history.pushState(null, null, '#/' + view)
+    document.documentElement.scrollTop = 0
 }
 
 function hideAll (selector) {
