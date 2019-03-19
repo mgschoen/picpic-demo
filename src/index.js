@@ -26,6 +26,8 @@ import {
     populateTerms
 } from './js/debug'
 
+import { storeSessionID } from './js/tracking'
+
 UIKit.use(Icons)
 
 // elements
@@ -47,7 +49,8 @@ var ppDebugMockup = document.querySelector('#pp-debug-mockup')
 var submitEventListener = function () {
     toggleLoadingState(true)
     submitText({
-        api: httpsEmbed ? 'netlify' : 'default'
+        api: httpsEmbed ? 'netlify' : 'default',
+        track: trackingToken ? true : false
     }, function (response, submittedText) {
         toggleLoadingState(false)
         UIKit.notification('Picpic has found some images!', {
@@ -88,6 +91,12 @@ var urlParams = parseUrlParameters(window.location.search)
 var initialView = urlParams.initialView || 'input'
 var debug = urlParams.godMode ? true : false
 var httpsEmbed = urlParams.httpsEmbed ? true : false
+var trackingToken = urlParams.trackingToken
+
+// Init tracking
+if (trackingToken) {
+    storeSessionID(trackingToken)
+}
 
 // init hash routing
 var navigationEventListener = function () {

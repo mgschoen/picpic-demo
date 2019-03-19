@@ -14,4 +14,18 @@ function parseUrlParameters (searchString) {
     return params
 }
 
-export { parseUrlParameters }
+function serializeUrlEncoded (object) {
+    var keys = Object.keys(object)
+    var encodedString = ''
+    for (var i=0; i < keys.length; i++) {
+        if (i > 0) {
+            encodedString += '&'
+        }
+        var key = keys[i]
+        var value = object[key]
+        encodedString += (encodeURIComponent(key) + '=' + encodeURIComponent(value))
+    }
+    return encodedString
+}
+
+export { parseUrlParameters, serializeUrlEncoded }

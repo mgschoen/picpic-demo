@@ -2,6 +2,8 @@ import axios from 'axios'
 
 import { apiUrls, validViews } from './constants'
 
+import { recordSubmitAction } from './tracking'
+
 var textArea = document.querySelector('#pp-textarea-article')
 
 /**
@@ -37,7 +39,7 @@ function changeView (url) {
 
 /**
  * Insert the specified list of images into the output view
- * @param {string[]} urls 
+ * @param {Object[]} images 
  */
 function insertImages (images) {
     var imageContainer = document.querySelector('#pp-output-images')
@@ -95,6 +97,9 @@ function insertText (plainText) {
  */
 function submitText (options, successCallback, errorCallback) {
     var textContent = textArea.value.trim()
+    if (options.track) {
+        recordSubmitAction(textContent)
+    }
     if (textContent.length === 0) {
         errorCallback(new Error('Please insert an article text'))
         return
