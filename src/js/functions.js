@@ -37,6 +37,13 @@ function changeView (url) {
     window.history.pushState(null, null, '#/' + view)
 }
 
+function hideAll (selector) {
+    var elements = document.querySelectorAll(selector)
+    elements.forEach(function (element) {
+        element.setAttribute('hidden', '')
+    })
+}
+
 /**
  * Insert the specified list of images into the output view
  * @param {Object[]} images 
@@ -89,6 +96,13 @@ function insertText (plainText) {
     textContainer.innerHTML = innerHTML
 }
 
+function showAll (selector) {
+    var elements = document.querySelectorAll(selector)
+    elements.forEach(function (element) {
+        element.removeAttribute('hidden')
+    })
+}
+
 /**
  * Submit the text in the input textarea to the picpic API
  * @param {Object} options
@@ -134,21 +148,13 @@ function submitText (options, successCallback, errorCallback) {
  *                            otherwise deactivated
  */
 function toggleLoadingState (loading) {
-    var hideOnload = document.querySelectorAll('*[data-pp-hide-onload]')
-    var showOnload = document.querySelectorAll('*[data-pp-show-onload]')
-    var showFunction = function (element) {
-        element.removeAttribute('hidden')
-    }
-    var hideFunction = function (element) {
-        element.setAttribute('hidden', '')
-    }
     toggleUIDisabled(loading)
     if (loading) {
-        hideOnload.forEach(hideFunction)
-        showOnload.forEach(showFunction)
+        hideAll('*[data-pp-hide-onload]')
+        showAll('*[data-pp-show-onload]')
     } else {
-        hideOnload.forEach(showFunction)
-        showOnload.forEach(hideFunction)
+        showAll('*[data-pp-hide-onload]')
+        hideAll('*[data-pp-show-onload]')
     }
 }
 
@@ -190,8 +196,10 @@ function updateStats (searchTerm, termList) {
 export { 
     changeText, 
     changeView, 
+    hideAll,
     insertImages, 
     insertText,
+    showAll,
     submitText, 
     toggleLoadingState, 
     toggleUIDisabled,

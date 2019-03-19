@@ -12,6 +12,7 @@ import {
 import { 
     changeText,
     changeView,
+    hideAll,
     insertImages, 
     insertText,
     submitText,
@@ -116,6 +117,10 @@ var navigationEventListener = function () {
 window.addEventListener('hashchange', navigationEventListener)
 
 changeView(initialView)
+
+if (httpsEmbed) {
+    hideAll('*[data-pp-hide-in-embed]')
+}
 
 if (debug) {
     ppDebug.removeAttribute('hidden')
