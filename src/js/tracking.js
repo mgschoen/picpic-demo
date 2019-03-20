@@ -1,5 +1,4 @@
 import axios from 'axios'
-import cookie from 'js-cookie'
 import hash from 'object-hash'
 
 import { tracking } from './constants'
