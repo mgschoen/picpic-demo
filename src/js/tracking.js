@@ -15,10 +15,9 @@ function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 
     var baseUrl = tracking.baseUrl
     var keys = tracking.keys
-    var sessionID = cookie.get(tracking.cookieNames.sessionID)
+    var sessionID = getTrackingCookie('sessionID')
     if (!sessionID) {
-        throw new Error('Could not read PicPic session ID from cookie "' 
-            + tracking.cookieNames.sessionID + '"')
+        throw new Error('Could not read PicPic session ID with identifier "sessionID"')
     }
     var trackingData = {}
     trackingData[keys.requestHash] = requestHash
@@ -41,7 +40,7 @@ function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 }
 
 function recordSubmitAction (content) {
-    var sessionID = cookie.get(tracking.cookieNames.sessionID)
+    var sessionID = getTrackingCookie('sessionID')
     var now = new Date().getTime()
     var requestHash = hash(now.toString() + sessionID.toString())
     storeRequestHash(requestHash)
@@ -49,12 +48,12 @@ function recordSubmitAction (content) {
 }
 
 function recordReceivedAction (searchTerm, images) {
-    var requestHash = cookie.get(tracking.cookieNames.requestHash)
+    var requestHash = getTrackingCookie('requestHash')
     var imageList = images.map(function (image) {
         return image.detailUrl + '\n'
     }).join('')
     sendTrackingInfo(requestHash, 'receiveImages', imageList, searchTerm)
-}
+} 
 
 
 /* Cookie management */
@@ -66,6 +65,10 @@ function storeTrackingCookie (key, value) {
     } else {
         throw new Error('Could not store cookie. Unknown key "' + key + '"')
     }
+}
+
+function getTrackingCookie (key) {
+    return cookie.get(tracking.cookieNames[key])
 }
 
 function storeRequestHash (hash) {
