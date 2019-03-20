@@ -15,7 +15,7 @@ function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 
     var baseUrl = tracking.baseUrl
     var keys = tracking.keys
-    var sessionID = getTrackingCookie('sessionID')
+    var sessionID = getTrackingGlobal('sessionID')
     if (!sessionID) {
         throw new Error('Could not read PicPic session ID with identifier "sessionID"')
     }
@@ -40,7 +40,7 @@ function sendTrackingInfo (requestHash, actionType, content, contentAppendix) {
 }
 
 function recordSubmitAction (content) {
-    var sessionID = getTrackingCookie('sessionID')
+    var sessionID = getTrackingGlobal('sessionID')
     var now = new Date().getTime()
     var requestHash = hash(now.toString() + sessionID.toString())
     storeRequestHash(requestHash)
@@ -48,7 +48,7 @@ function recordSubmitAction (content) {
 }
 
 function recordReceivedAction (searchTerm, images) {
-    var requestHash = getTrackingCookie('requestHash')
+    var requestHash = getTrackingGlobal('requestHash')
     var imageList = images.map(function (image) {
         return image.detailUrl + '\n'
     }).join('')
@@ -58,25 +58,29 @@ function recordReceivedAction (searchTerm, images) {
 
 /* Cookie management */
 
-function storeTrackingCookie (key, value) {
-    var cookieName = tracking.cookieNames[key]
-    if (cookieName) {
-        cookie.set(cookieName, value)
+function storeTrackingGlobal (key, value) {
+    var globalKey = tracking.globalKeys[key]
+    if (globalKey) {
+        if (!document.PICPIC_GLOBALS) {
+            document.PICPIC_GLOBALS = {}
+        }
+        document.PICPIC_GLOBALS[globalKey] = value
     } else {
-        throw new Error('Could not store cookie. Unknown key "' + key + '"')
+        throw new Error('Could not set tracking global. Unknown key "' + key + '"')
     }
 }
 
-function getTrackingCookie (key) {
-    return cookie.get(tracking.cookieNames[key])
+function getTrackingGlobal (key) {
+    var globalKey = tracking.globalKeys[key]
+    return document.PICPIC_GLOBALS[globalKey]
 }
 
 function storeRequestHash (hash) {
-    storeTrackingCookie('requestHash', hash)
+    storeTrackingGlobal('requestHash', hash)
 }
 
 function storeSessionID (id) {
-    storeTrackingCookie('sessionID', id)
+    storeTrackingGlobal('sessionID', id)
 }
 
 export { recordReceivedAction, recordSubmitAction, storeSessionID }

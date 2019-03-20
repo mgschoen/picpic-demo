@@ -11,7 +11,7 @@ module.exports = {
 
     tracking: {
         baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScSNW2s62mFgwCpajlXNCktSwy-Fyn8I-tW8V_m01h0PSma7g/formResponse',
-        cookieNames: {
+        globalKeys: {
             requestHash: 'picpic_request_hash',
             sessionID: 'picpic_session_id'
         },
