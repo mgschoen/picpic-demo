@@ -1,7 +1,7 @@
 function attachPolyfills () {
 
     // Promises
-    require('es6-promise')
+    require('es6-promise').polyfill()
 
     // IE11 NodeList.forEach()
     if (window.NodeList && !NodeList.prototype.forEach) {
