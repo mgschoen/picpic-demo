@@ -1,8 +1,7 @@
 require('./scss/main.scss')
 
-// before doing anything, attach polyfills
-import { attachPolyfills } from './js/polyfill'
-attachPolyfills()
+// before doing anything, import polyfills
+import 'babel-polyfill'
 
 import UIKit from 'uikit'
 import Icons from 'uikit/dist/js/uikit-icons'
