@@ -1,7 +1,7 @@
 module.exports = {
 
     apiUrls: {
-        default: 'http://picpic-api.argonn.me/custom/picpic/ml',
+        default: 'https://picpic-api-ci.herokuapp.com/custom/picpic/ml',
         netlify: 'https://vigilant-yonath-af08cf.netlify.com/.netlify/functions/custom-picpic'
     },
     
