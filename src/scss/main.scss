@@ -30,6 +30,33 @@ $global-font-family: "Roboto Slab" -apple-system, BlinkMacSystemFont, "Segoe UI"
     }
 }
 
+.pp-status {
+    margin: auto 10px;
+
+    &-signal {
+        border-radius: 5px;
+        height: 10px;
+        margin: 5px;
+        width: 10px;
+
+        &--busy {
+            background-color: #faa05a;
+        }
+
+        &--error {
+            background-color: #f0506e;
+        }
+
+        &--healthy {
+            background-color: #32d296;
+        }
+    }
+
+    &-label {
+        margin: 0;
+    }
+}
+
 .pp-output {
     
     &-text {
