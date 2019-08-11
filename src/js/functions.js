@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-import { api, validViews } from './constants'
+import { 
+    api, 
+    statusLabels, 
+    validViews
+} from './constants'
 
 import { parseUrlParameters } from './util'
 import { recordSubmitAction } from './tracking'
@@ -103,6 +107,18 @@ function insertText (plainText) {
     textContainer.innerHTML = innerHTML
 }
 
+function setStatusIndicator (status) {
+    var validStatuses = Object.keys(statusLabels)
+    if (validStatuses.indexOf(status) < 0) {
+        throw new Error('"' + status + '" is not a valid application status')
+    }
+    var ppStatusSignal = document.querySelector('#pp-status-signal')
+    var ppStatusLabel = document.querySelector('#pp-status-label')
+    var statusClass = 'pp-status-signal--' + status
+    ppStatusSignal.className = 'pp-status-signal ' + statusClass
+    ppStatusLabel.textContent = statusLabels[status]
+}
+
 function showAll (selector) {
     var elements = document.querySelectorAll(selector)
     elements.forEach(function (element) {
@@ -181,10 +197,22 @@ function toggleUIDisabled (disabled) {
 }
 
 function updateAppStatus () {
-    console.log(apiConfig.baseUrl + apiConfig.routes.awake)
-    // return new Promise(function (resolve, reject) {
-        
-    // })
+    if (apiConfig.routes.awake) {
+        axios.get(apiConfig.baseUrl + apiConfig.routes.awake)
+            .then(function (response) {
+                if (response.status === 200 && response.data.awake) {
+                    setStatusIndicator('healthy')
+                } else {
+                    setStatusIndicator('error')
+                    console.info('Response to awake call:', response)
+                }
+                window.setTimeout(updateAppStatus, 5000)
+            })
+            .catch(function (error) {
+                setStatusIndicator('error')
+                console.info('Response to awake call:', error)
+            })
+    }
 }
 
 function updateStats (searchTerm, termList) {
@@ -208,6 +236,7 @@ export {
     hideAll,
     insertImages, 
     insertText,
+    setStatusIndicator,
     showAll,
     submitText, 
     toggleLoadingState, 

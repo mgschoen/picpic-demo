@@ -18,6 +18,7 @@ import {
     hideAll,
     insertImages, 
     insertText,
+    setStatusIndicator,
     submitText,
     toggleLoadingState,
     updateAppStatus,
@@ -44,8 +45,6 @@ var ppButtonSample1 = document.querySelector('#pp-button-sample-1')
 var ppButtonSample2 = document.querySelector('#pp-button-sample-2')
 var ppButtonSample3 = document.querySelector('#pp-button-sample-3')
 var ppReturnButtons = document.querySelectorAll('.pp-button-return')
-var ppStatusSignal = document.querySelector('#pp-status-signal')
-var ppStatusLabel = document.querySelector('#pp-status-label')
 
 var ppDebug = document.querySelector('#pp-debug')
 var ppDebugViewInput = document.querySelector('#pp-debug-view-input')
@@ -165,4 +164,5 @@ if (debug) {
     })
 }
 
+setStatusIndicator('busy')
 updateAppStatus()
