@@ -14,6 +14,18 @@ $global-font-family: "Roboto Slab" -apple-system, BlinkMacSystemFont, "Segoe UI"
 
 @import "uikit/src/scss/uikit-theme.scss";
 
+@keyframes pulse {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fade {
+    0%   { opacity: 1; }
+    50%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 #pp-output-images {
 
     & .uk-tile {
@@ -38,22 +50,28 @@ $global-font-family: "Roboto Slab" -apple-system, BlinkMacSystemFont, "Segoe UI"
         height: 10px;
         margin: 5px;
         width: 10px;
-
-        &--busy {
-            background-color: #faa05a;
-        }
-
-        &--error {
-            background-color: #f0506e;
-        }
-
-        &--healthy {
-            background-color: #32d296;
-        }
     }
 
     &-label {
         margin: 0;
+    }
+
+    &--busy .pp-status-signal {
+        animation: pulse 1s infinite;
+        background-color: #faa05a;
+    }
+
+    &--error .pp-status-signal {
+        background-color: #f0506e;
+    }
+
+    &--healthy {
+        animation: fade 10s;
+        opacity: 0;
+
+        .pp-status-signal {
+            background-color: #32d296;
+        }
     }
 }
 

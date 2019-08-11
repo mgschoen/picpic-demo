@@ -16,6 +16,13 @@ var apiConfig = api[apiName]
 
 var textArea = document.querySelector('#pp-textarea-article')
 
+var validStatuses = Object.keys(statusLabels)
+var validStatusClasses = validStatuses.map(function (status) {
+    return '\\s*pp-status--' + status + '\\s*'
+})
+var statusRegexpString = '(' + validStatusClasses.toString().replace(/,/g, '|') + ')'
+var statusRegexp = new RegExp(statusRegexpString, 'g')
+
 /**
  * Swap the text in the input textarea
  * @param {string} newText 
@@ -108,14 +115,13 @@ function insertText (plainText) {
 }
 
 function setStatusIndicator (status) {
-    var validStatuses = Object.keys(statusLabels)
     if (validStatuses.indexOf(status) < 0) {
         throw new Error('"' + status + '" is not a valid application status')
     }
-    var ppStatusSignal = document.querySelector('#pp-status-signal')
+    var ppStatus = document.querySelector('#pp-status')
     var ppStatusLabel = document.querySelector('#pp-status-label')
-    var statusClass = 'pp-status-signal--' + status
-    ppStatusSignal.className = 'pp-status-signal ' + statusClass
+    var statusClass = 'pp-status--' + status
+    ppStatus.className = ppStatus.className.replace(statusRegexp, ' ') + ' ' + statusClass
     ppStatusLabel.textContent = statusLabels[status]
 }
 
