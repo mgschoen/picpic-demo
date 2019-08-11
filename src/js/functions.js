@@ -1,8 +1,14 @@
 import axios from 'axios'
 
-import { apiUrls, validViews } from './constants'
+import { api, validViews } from './constants'
 
+import { parseUrlParameters } from './util'
 import { recordSubmitAction } from './tracking'
+
+var urlParams = parseUrlParameters(window.location.search)
+var httpsEmbed = urlParams.httpsEmbed ? true : false
+var apiName = httpsEmbed ? 'netlify' : 'default'
+var apiConfig = api[apiName]
 
 var textArea = document.querySelector('#pp-textarea-article')
 
@@ -119,13 +125,8 @@ function submitText (options, successCallback, errorCallback) {
         errorCallback(new Error('Please insert an article text'))
         return
     }
-    var validApis = Object.keys(apiUrls)
-    var apiName = (validApis.indexOf(options.api) >= 0) 
-        ? options.api
-        : 'default'
-    var baseUrl = apiUrls[apiName]
     axios({
-        url: baseUrl + '?threshold=0.1&numImages=12', 
+        url: apiConfig.baseUrl + apiConfig.routes.picpic + '?threshold=0.1&numImages=12', 
         method: 'post',
         headers: { 'Content-Type': 'text/plain' },
         data: textContent
@@ -179,6 +180,13 @@ function toggleUIDisabled (disabled) {
     textareas.forEach(toggler)
 }
 
+function updateAppStatus () {
+    console.log(apiConfig.baseUrl + apiConfig.routes.awake)
+    // return new Promise(function (resolve, reject) {
+        
+    // })
+}
+
 function updateStats (searchTerm, termList) {
     var searchTermContainer = document.querySelector('#pp-output-searchterm')
     var termListContainer = document.querySelector('#pp-output-termlist')
@@ -204,5 +212,6 @@ export {
     submitText, 
     toggleLoadingState, 
     toggleUIDisabled,
+    updateAppStatus,
     updateStats
 }

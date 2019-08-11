@@ -20,6 +20,7 @@ import {
     insertText,
     submitText,
     toggleLoadingState,
+    updateAppStatus,
     updateStats
 } from './js/functions' 
 
@@ -43,6 +44,8 @@ var ppButtonSample1 = document.querySelector('#pp-button-sample-1')
 var ppButtonSample2 = document.querySelector('#pp-button-sample-2')
 var ppButtonSample3 = document.querySelector('#pp-button-sample-3')
 var ppReturnButtons = document.querySelectorAll('.pp-button-return')
+var ppStatusSignal = document.querySelector('#pp-status-signal')
+var ppStatusLabel = document.querySelector('#pp-status-label')
 
 var ppDebug = document.querySelector('#pp-debug')
 var ppDebugViewInput = document.querySelector('#pp-debug-view-input')
@@ -56,7 +59,6 @@ var ppDebugMockup = document.querySelector('#pp-debug-mockup')
 var submitEventListener = function () {
     toggleLoadingState(true)
     submitText({
-        api: httpsEmbed ? 'netlify' : 'default',
         track: trackingToken ? true : false
     }, function (response, submittedText) {
         if (trackingToken) {
@@ -162,3 +164,5 @@ if (debug) {
         })
     })
 }
+
+updateAppStatus()
